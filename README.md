@@ -100,9 +100,15 @@ If there is a mismatch, the program raises an error.
 The solution was tested with all 10 provided test cases.
 
 Technologies
-    Python
-    JSON
-    Built-in Python json module
-    Built-in Python math module
-    Built-in Python csv module
-    Built-in Python random module
+    
+Python
+
+JSON
+
+Built-in Python json module
+
+Built-in Python math module
+
+Built-in Python csv module
+
+Built-in Python random module
