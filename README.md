@@ -35,7 +35,7 @@ Python Assignment -2026/
     ├── test_case_2.json
     ├── ...
     └── test_case_10.json
-
+```
 
 ## Assumptions
 
