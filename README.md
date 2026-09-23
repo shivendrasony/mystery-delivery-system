@@ -13,6 +13,8 @@ delivery agent and generating a delivery performance report.
 - Identifies the most efficient agent.
 - Validates that all packages are delivered.
 - Generates the final result in `report.json`.
+- Displays ASCII-style delivery routes for each package.
+- Exports the top-performing agent to `top_performer.csv`.
 
 ## Project Structure
 

@@ -144,6 +144,19 @@ def find_best_agent(agent_totals):
         agent_totals,
         key=lambda agent_id: agent_totals[agent_id]["efficiency"]
     )
+def display_routes(packages, assignments):
+    print("\n--- Route Visualization ---")
+
+    for package in packages:
+        package_id = package["id"]
+        agent_id = assignments[package_id]
+
+        warehouse_id = package.get("warehouse") or package.get("warehouse_id")
+
+        print(
+            f"{agent_id} -> {warehouse_id} -> "
+            f"{package_id} -> Destination {package['destination']}"
+        )
 
 def generate_report(agent_totals, best_agent):
     report = {}
@@ -227,6 +240,8 @@ def main():
         warehouses,
         agents
     )
+
+    display_routes(packages, assignments)
 
     agent_totals = calculate_agent_totals(
         packages,
