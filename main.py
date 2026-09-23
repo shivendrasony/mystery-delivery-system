@@ -2,6 +2,7 @@ import json
 import math
 import sys
 import csv
+import random
 
 def normalize_agents(agents):
     if isinstance(agents, dict):
@@ -29,6 +30,8 @@ def calculate_distance(point1, point2):
 
     return math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2)
 
+def generate_delivery_delay():
+    return random.randint(5, 20)
 
 def find_nearest_agent(warehouse_location, agents):
     nearest_agent = None
@@ -107,14 +110,18 @@ def calculate_agent_totals(packages, assignments, warehouses):
             warehouses
         )
 
+        delay = generate_delivery_delay()
+
         if agent_id not in agent_totals:
             agent_totals[agent_id] = {
                 "packages_delivered": 0,
-                "total_distance": 0.0
+                "total_distance": 0.0,
+                "total_delay": 0
             }
 
         agent_totals[agent_id]["packages_delivered"] += 1
         agent_totals[agent_id]["total_distance"] += distance
+        agent_totals[agent_id]["total_delay"] += delay
 
     return agent_totals
 
@@ -144,6 +151,7 @@ def find_best_agent(agent_totals):
         agent_totals,
         key=lambda agent_id: agent_totals[agent_id]["efficiency"]
     )
+#-----------------------------------------------------------------
 def display_routes(packages, assignments):
     print("\n--- Route Visualization ---")
 
@@ -165,13 +173,14 @@ def generate_report(agent_totals, best_agent):
         report[agent_id] = {
             "packages_delivered": details["packages_delivered"],
             "total_distance": round(details["total_distance"], 2),
-            "efficiency": round(details["efficiency"], 2)
+            "efficiency": round(details["efficiency"], 2),
+            "total_delay": details["total_delay"]
         }
 
     report["best_agent"] = best_agent
 
     return report
-
+#-----------------------------------------------------------------
 def export_top_performer(agent_totals, best_agent):
     with open("top_performer.csv", "w", newline="") as file:
         writer = csv.writer(file)
@@ -191,7 +200,7 @@ def export_top_performer(agent_totals, best_agent):
             round(details["total_distance"], 2),
             round(details["efficiency"], 2)
         ])
-
+#-----------------------------------------------------------------
 def load_data(file_path):
     with open(file_path, "r") as file:
         data = json.load(file)
