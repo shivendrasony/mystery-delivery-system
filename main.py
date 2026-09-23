@@ -1,6 +1,7 @@
 import json
 import math
 import sys
+import csv
 
 def normalize_agents(agents):
     if isinstance(agents, dict):
@@ -158,6 +159,26 @@ def generate_report(agent_totals, best_agent):
 
     return report
 
+def export_top_performer(agent_totals, best_agent):
+    with open("top_performer.csv", "w", newline="") as file:
+        writer = csv.writer(file)
+
+        writer.writerow([
+            "agent_id",
+            "packages_delivered",
+            "total_distance",
+            "efficiency"
+        ])
+
+        details = agent_totals[best_agent]
+
+        writer.writerow([
+            best_agent,
+            details["packages_delivered"],
+            round(details["total_distance"], 2),
+            round(details["efficiency"], 2)
+        ])
+
 def load_data(file_path):
     with open(file_path, "r") as file:
         data = json.load(file)
@@ -223,6 +244,11 @@ def main():
     best_agent = find_best_agent(agent_totals)
 
     report = generate_report(
+        agent_totals,
+        best_agent
+    )
+
+    export_top_performer(
         agent_totals,
         best_agent
     )
