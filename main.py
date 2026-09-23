@@ -50,10 +50,17 @@ def find_nearest_agent(warehouse_location, agents):
     return nearest_agent
 
 
-def assign_packages(packages, warehouses, agents):
+def assign_packages(packages, warehouses, agents, new_agent=None, join_after=None):
     assignments = {}
 
     for package in packages:
+        if new_agent and join_after is not None:
+            if len(assignments) == join_after:
+                add_new_agent(
+                    agents,
+                    new_agent["id"],
+                    new_agent["location"]
+                )
         package_id = package["id"]
 
         # Support both input formats
@@ -69,6 +76,9 @@ def assign_packages(packages, warehouses, agents):
         assignments[package_id] = nearest_agent
 
     return assignments
+
+def add_new_agent(agents, agent_id, location):
+    agents[agent_id] = location
 
 def group_packages_by_agent(assignments):
     agent_packages = {}
@@ -247,7 +257,12 @@ def main():
     assignments = assign_packages(
         packages,
         warehouses,
-        agents
+        agents,
+        new_agent={
+            "id": "A4",
+            "location": [0, 0]
+        },
+        join_after=3
     )
 
     display_routes(packages, assignments)
